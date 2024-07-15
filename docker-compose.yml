@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  nginx:
+    container_name: rfa_nginx
+    image: nginx:latest
+    volumes:
+      - ./:/var/www
+      - ./_docker/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "8876:80"
+    depends_on:
+      - app
+
+  db:
+    container_name: rfa_db
+    image: mariadb:10.5
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: rfa
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - ./_docker/tmp/db:/var/lib/mysql
+    ports:
+      - "9906:3306"
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    networks:
+      - default
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./_docker/tmp/redisdata:/data
+
+  app:
+    container_name: rfa_app
+    build:
+      context: .
+      dockerfile: _docker/php/Dockerfile
+    volumes:
+      - ./:/var/www
