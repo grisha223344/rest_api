@@ -17,9 +17,9 @@ class UserController extends Controller
         return response()->json($users, 200);
     }
 
-    public function show(Request $request): JsonResponse
+    public function show($id): JsonResponse
     {
-        $user = app(UserService::class)->getById($request);
+        $user = app(UserService::class)->getById($id);
 
         return response()->json($user, 200);
     }

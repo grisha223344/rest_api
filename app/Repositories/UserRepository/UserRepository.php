@@ -41,11 +41,11 @@ class UserRepository extends CoreRepository
         return $query->get();
     }
 
-    public function getById($id): Collection
+    public function getById($id)
     {
-        $query = $this->setFields()->where('id', $id);
+        $query = $this->setFields()->find($id);
 
-        return $query->get();
+        return $query;
     }
 
     public function getDeletedWithFilter(FilterDataUserDTO $filterParams): Collection
